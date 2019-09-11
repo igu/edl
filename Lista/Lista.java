@@ -14,8 +14,8 @@ public interface Lista {
       ==== METÓDOS DE FILA ===== 
     */
     
-    public No isFirst(No n);
-    public No isLast(No n);
+    public boolean isFirst(No n);
+    public boolean isLast(No n);
     
     /*
       ==== METÓDOS PARA ACESSAR ===== 
