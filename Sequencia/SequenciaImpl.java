@@ -26,7 +26,13 @@ public class SequenciaImpl implements Sequencia {
 
 	@Override
 	public void display() {
-		// TODO Auto-generated method stub
+		No copy = this.sentinelaInicial;
+		System.out.print(copy.getO() + " (S.I) <=> ");
+		for(int i = 0; i < this.TAMANHO; i++) {
+			System.out.print(copy.getProx().getO() + " <=> ");
+			copy = copy.getProx();
+		}
+		System.out.println(copy.getO() + " (S.F)");
 	}
 
 	@Override
