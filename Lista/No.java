@@ -1,4 +1,4 @@
-package Lista;
+package edl.Lista;
 
 public class No {
     

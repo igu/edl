@@ -1,4 +1,4 @@
-package Vector;
+package edl.Vector;
 
 import java.util.Random;
 import java.util.Scanner;

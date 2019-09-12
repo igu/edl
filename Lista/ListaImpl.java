@@ -1,4 +1,4 @@
-package Lista;
+package edl.Lista;
 
 public class ListaImpl implements Lista {
 
@@ -23,7 +23,13 @@ public class ListaImpl implements Lista {
 
     @Override
     public void display() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        No copy = this.sentinelaInicial;
+        System.out.println(copy.getO() + " (S.I) => ");  // IMPRIME NÓ SENTINELA INICIAL
+        for(int i = 0; i < this.TAMANHO; i++) {
+        	System.out.print(copy.getO() + " => ");
+        	copy = copy.getProx();
+        }
+        System.out.print(copy.getO() + " (S.F)\n"); // IMPRIME NÓ SENTINELA FINAL
     }
 
 

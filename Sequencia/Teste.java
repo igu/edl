@@ -1,5 +1,5 @@
-package edl.Lista;
+package edl.Sequencia;
 
 public class Teste {
-    
+
 }

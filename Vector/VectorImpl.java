@@ -1,4 +1,4 @@
-package Vector;
+package edl.Vector;
 
 public class VectorImpl implements Vector {
 

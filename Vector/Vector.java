@@ -1,4 +1,4 @@
-package Vector;
+package edl.Vector;
 
 public interface Vector {
     
@@ -6,9 +6,9 @@ public interface Vector {
     public Object replaceAtRank(int r, Object o) throws EVectorNotExists;
     public void insertAtRank(int r, Object o) throws EVectorNotExists;
     public Object removeAtRank(int r) throws EVectorNotExists;
-    public int size();
-    public boolean isEmpty();
-    public void resize();
     public void display();
+    public boolean isEmpty();
+    public int size();
+    public void resize();
     
 }
