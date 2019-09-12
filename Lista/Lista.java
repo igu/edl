@@ -32,10 +32,10 @@ public interface Lista {
     
     public void replaceElement(No n, Object o);
     public void swapElements(No trocado, No trocador);
-    public void insertBefore(No before, Object o);
-    public void insertAfter(No after, Object o);
-    public void insertFirst(Object o);
-    public void insertLast(Object o);
+    public No insertBefore(No before, Object o);
+    public No insertAfter(No after, Object o);
+    public No insertFirst(Object o);
+    public No insertLast(Object o);
     public void remove(No n);
     
 }

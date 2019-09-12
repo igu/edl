@@ -49,37 +49,59 @@ public class ListaImpl implements Lista {
 
     @Override
     public void replaceElement(No n, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        n.setO(o);
     }
 
     @Override
     public void swapElements(No trocado, No trocador) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Object mov = trocado.getO();
+        trocado.setO( trocador.getO() );
+        trocador.setO( mov );
     }
 
     @Override
-    public void insertBefore(No before, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public No insertBefore(No before, Object o) {
+        No novi = new No(before, before.getAnt(), o);
+        before.getAnt().setProx(novi);
+        before.setAnt(novi);
+        this.TAMANHO++;
+        return novi;
     }
 
     @Override
-    public void insertAfter(No after, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public No insertAfter(No after, Object o) {
+        No novi = new No(after.getProx(), after, o);
+        after.getProx().setAnt(novi);
+        after.setProx(novi);
+        this.TAMANHO++;
+        return novi;
     }
 
     @Override
-    public void insertFirst(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public No insertFirst(Object o) {
+        No novi = new No(this.sentinelaInicial.getProx(), this.sentinelaInicial, o);
+        this.sentinelaInicial.getProx().setAnt(novi);
+        this.sentinelaInicial.setProx(novi);
+        this.TAMANHO++;
+        return novi;
     }
 
     @Override
-    public void insertLast(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public No insertLast(Object o) {
+        No novi = new No(this.sentinelaFinal, this.sentinelaFinal.getAnt(), o);
+        this.sentinelaFinal.getAnt().setProx(novi);
+        this.sentinelaFinal.setAnt(novi);
+        this.TAMANHO++;
+        return novi;
     }
 
     @Override
     public void remove(No n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        n.getAnt().setProx(n.getProx());
+        n.getProx().setAnt(n.getAnt());
+        n.setAnt(null); // JAVA N PRECISA
+        n.setProx(null); // JAVA N PRECISA
+        this.TAMANHO--;
     }
 
     @Override
