@@ -21,7 +21,7 @@ public class VectorImpl implements Vector {
     @Override
     public Object replaceAtRank(int r, Object o) throws EVectorNotExists {
         try {
-            Object old = this.S[r];
+            Object old = this.elemAtRank(r);
             this.S[r] = o;
             return old;
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class VectorImpl implements Vector {
     @Override
     public Object removeAtRank(int r) throws EVectorNotExists {
         try {
-            Object old = this.S[r];
+            Object old = this.elemAtRank(r);
             for (int i = r; i < (this.S.length - 1); i++) {
                 this.S[i] = this.S[i + 1];
                 this.S[i + 1] = null;
@@ -85,7 +85,6 @@ public class VectorImpl implements Vector {
             System.out.print(this.S[i] + "\t");
         }
         System.out.print("\n");
-
     }
 
 }

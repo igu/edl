@@ -2,13 +2,13 @@ package edl.Lista;
 
 public class ListaImpl implements Lista {
 
-    private No sentinelaInicial;
-    private No sentinelaFinal;
+    private No sentinelaInicial = new No(null, null);
+    private No sentinelaFinal = new No(null, null);
     private int TAMANHO = 0;
     
     public ListaImpl() {
-        this.sentinelaInicial.setProx(new No(null, null));
-        this.sentinelaFinal.setAnt(new No(null, null));
+        this.sentinelaInicial.setProx(this.sentinelaFinal);
+        this.sentinelaFinal.setAnt(this.sentinelaInicial);
     }
 
     @Override
@@ -24,12 +24,12 @@ public class ListaImpl implements Lista {
     @Override
     public void display() {
         No copy = this.sentinelaInicial;
-        System.out.println(copy.getO() + " (S.I) => ");  // IMPRIME NÓ SENTINELA INICIAL
+        System.out.print(copy.getO() + " (S.I) => ");  // IMPRIME NÓ SENTINELA INICIAL
         for(int i = 0; i < this.TAMANHO; i++) {
-        	System.out.print(copy.getO() + " => ");
+        	System.out.print(copy.getProx().getO() + " => ");
         	copy = copy.getProx();
         }
-        System.out.print(copy.getO() + " (S.F)\n"); // IMPRIME NÓ SENTINELA FINAL
+        System.out.print(copy.getProx().getO() + " (S.F)\n"); // IMPRIME NÓ SENTINELA FINAL
     }
 
 
