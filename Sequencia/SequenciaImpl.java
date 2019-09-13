@@ -27,12 +27,12 @@ public class SequenciaImpl implements Sequencia {
 	@Override
 	public void display() {
 		No copy = this.sentinelaInicial;
-		System.out.print(copy.getO() + " (S.I) <=> ");
-		for(int i = 0; i < this.TAMANHO; i++) {
-			System.out.print(copy.getProx().getO() + " <=> ");
-			copy = copy.getProx();
-		}
-		System.out.println(copy.getO() + " (S.F)");
+        System.out.print(copy.getO() + " (S.I) => ");  // IMPRIME NÓ SENTINELA INICIAL
+        for(int i = 0; i < this.TAMANHO; i++) {
+        	System.out.print(copy.getProx().getO() + " => ");
+        	copy = copy.getProx();
+        }
+        System.out.print(copy.getProx().getO() + " (S.F)\n"); // IMPRIME NÓ SENTINELA FINAL
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class SequenciaImpl implements Sequencia {
 	@Override
 	public int rankOf(No no) {
 		No n = this.sentinelaInicial.getProx();
-		int r = 0; // ASK TO COLEGUINHA ABOUT R INICIALIZED WITH 0
+		int r = 0;
 		while(n != no && n != this.sentinelaFinal) {
 			n = n.getProx();
 			r++;
