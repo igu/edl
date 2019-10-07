@@ -7,7 +7,7 @@ public interface Arvore {
     /* Métodos Genéricos */
     public int size();
     public boolean isEmpty();
-    public int height();
+    public int height(No v);
     public Iterator elements();
     public Iterator Nos();
     
