@@ -26,7 +26,7 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
             } catch (ElNaoEncontradoException ex) {
                 System.out.println("Elemento não encontrado");
             }
-           No novoNo = new No(elem, null, null, pai);
+          // No novoNo = new No(elem, null, null, pai);
         } else {
            this.root = new No(elem, null, null, null);
            this.size++;
@@ -55,7 +55,8 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
 
     @Override
     public int profundidade(No no) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.root == no) return 0;
+        return 1 + this.profundidade(no.getPai());
     }
 
     @Override
@@ -70,17 +71,19 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
 
     @Override
     public boolean containsChildDireito(No no) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return no.getChildDireito() != null;
     }
 
     @Override
     public int countChilds(No no) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.containsChildDireito(no) && this.containsChildEsquerdo(no)) return 2;
+        else if(this.isExternal(no)) return 0;
+        return 1;
     }
 
     @Override
     public boolean isExternal(No no) {
-        return this.containsChildDireito(no) || this.containsChildEsquerdo(no);
+        return !(this.containsChildDireito(no) || this.containsChildEsquerdo(no));
     }
 
     @Override
