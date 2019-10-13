@@ -174,23 +174,23 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     	this.nosArrayList.add(no);
     	
     	if(this.containsChildEsquerdo(no)) {
-    		this.posOrdem(no.getChildEsquerdo());
+    		this.preOrdem(no.getChildEsquerdo());
     	}
     	
-    	if(this.containsChildEsquerdo(no)) {
-    		this.posOrdem(no.getChildDireito());
+    	if(this.containsChildDireito(no)) {
+    		this.preOrdem(no.getChildDireito());
     	}
     }
     
     private void inOrdem(No no) {
     	if(this.containsChildEsquerdo(no)) {
-    		this.posOrdem(no.getChildEsquerdo());
+    		this.inOrdem(no.getChildEsquerdo());
     	}
     	
     	this.nosArrayList.add(no);
     	
-    	if(this.containsChildEsquerdo(no)) {
-    		this.posOrdem(no.getChildDireito());
+    	if(this.containsChildDireito(no)) {
+    		this.inOrdem(no.getChildDireito());
     	}
     }
     
@@ -199,7 +199,7 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     		this.posOrdem(no.getChildEsquerdo());
     	}
     	
-    	if(this.containsChildEsquerdo(no)) {
+    	if(this.containsChildDireito(no)) {
     		this.posOrdem(no.getChildDireito());
     	}
     	
@@ -208,7 +208,7 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     
     @Override
     public void display() {
-        /* FALTA IMPLEMENTAR */
+    	
     }
     
 }
