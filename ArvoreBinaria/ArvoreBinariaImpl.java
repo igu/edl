@@ -62,11 +62,43 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
         				this.size--;
         			}
         		}else if(this.countChilds(exclusao) == 1) { // EXCLUIR NÓ COM UM FILHO
-        			
+        			if(this.root == exclusao) { // excluir raiz
+        				if(this.containsChildDireito(exclusao)) {
+        					exclusao.getChildDireito().setPai(null);
+        					this.root = exclusao.getChildDireito();
+        					this.size--;
+        				} else {
+        					exclusao.getChildEsquerdo().setPai(null);
+        					this.root = exclusao.getChildEsquerdo();
+        					this.size--;
+        				}
+        			} else {
+        				if(this.containsChildDireito(exclusao)) {
+        					No filho = exclusao.getChildDireito();
+        					filho.setPai(exclusao.getPai());
+        					if(exclusao.getPai().getChildDireito() == exclusao) {
+        						exclusao.getPai().setChildDireito(filho);
+        					}else {
+        						exclusao.getPai().setChildEsquerdo(filho);
+        					}
+        				}else {
+        					No filho = exclusao.getChildEsquerdo();
+        					filho.setPai(exclusao.getPai());
+        					if(exclusao.getPai().getChildDireito() == exclusao) {
+        						exclusao.getPai().setChildDireito(filho);
+        					}else {
+        						exclusao.getPai().setChildEsquerdo(filho);
+        					}
+        				}
+        				exclusao.setPai(null);
+        				exclusao.setChildDireito(null);
+        				exclusao.setChildEsquerdo(null);
+        				this.size--;
+        			}
         		}else if(this.countChilds(exclusao) == 2) { // EXCLUIR NÓ COM DOIS FILHOS 
         			
         		}
-        	} else throw new ElNaoEncontradoException("Elemento não contido na arvore");
+        	} else throw new ElNaoEncontradoException("Elemento não contido na arvore binaria");
         }
     }
 
