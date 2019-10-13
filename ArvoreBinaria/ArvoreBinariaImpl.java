@@ -1,6 +1,7 @@
 package ArvoreBinaria;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,12 +46,34 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
 
     @Override
     public ArrayList<No> nos(int mode) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    	
+       this.nosArrayList = new ArrayList<No>();
+       if(mode == 1) {
+    	   this.preOrdem(this.root);
+       }else if(mode == 2){
+    	   this.inOrdem(this.root);
+       } else if(mode == 3) {
+    	  this.posOrdem(this.root);
+       }
+       
+       return this.nosArrayList;
     }
 
     @Override
     public int height(No no) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.isExternal(no) || no == null) return 0;
+        else {
+        	int i = 0, h = 0;
+        	
+        	List<No> childs = new ArrayList<No>();
+        	childs.add(no.getChildEsquerdo());
+        	childs.add(no.getChildDireito());
+        	
+        	while(i < childs.size()) {
+        		h = Math.max(h, this.height(childs.get(i++)));
+        	}
+        	return 1 + h;
+        }
     }
 
     @Override
@@ -85,7 +108,43 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     public boolean isExternal(No no) {
         return !(this.containsChildDireito(no) || this.containsChildEsquerdo(no));
     }
-
+    
+    private void preOrdem(No no) {
+    	this.nosArrayList.add(no);
+    	
+    	if(this.containsChildEsquerdo(no)) {
+    		this.posOrdem(no.getChildEsquerdo());
+    	}
+    	
+    	if(this.containsChildEsquerdo(no)) {
+    		this.posOrdem(no.getChildDireito());
+    	}
+    }
+    
+    private void inOrdem(No no) {
+    	if(this.containsChildEsquerdo(no)) {
+    		this.posOrdem(no.getChildEsquerdo());
+    	}
+    	
+    	this.nosArrayList.add(no);
+    	
+    	if(this.containsChildEsquerdo(no)) {
+    		this.posOrdem(no.getChildDireito());
+    	}
+    }
+    
+    private void posOrdem(No no) {
+    	if(this.containsChildEsquerdo(no)) {
+    		this.posOrdem(no.getChildEsquerdo());
+    	}
+    	
+    	if(this.containsChildEsquerdo(no)) {
+    		this.posOrdem(no.getChildDireito());
+    	}
+    	
+    	this.nosArrayList.add(no);
+    }
+    
     @Override
     public void display() {
         /* FALTA IMPLEMENTAR */
