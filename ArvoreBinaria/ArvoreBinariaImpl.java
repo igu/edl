@@ -66,12 +66,11 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
         				if(this.containsChildDireito(exclusao)) {
         					exclusao.getChildDireito().setPai(null);
         					this.root = exclusao.getChildDireito();
-        					this.size--;
         				} else {
         					exclusao.getChildEsquerdo().setPai(null);
         					this.root = exclusao.getChildEsquerdo();
-        					this.size--;
         				}
+        				this.size--;
         			} else {
         				if(this.containsChildDireito(exclusao)) {
         					No filho = exclusao.getChildDireito();
@@ -96,7 +95,15 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
         				this.size--;
         			}
         		}else if(this.countChilds(exclusao) == 2) { // EXCLUIR NÓ COM DOIS FILHOS 
-        			
+        			/* pecorrer até encontrar o menor elemento dir/last esq */
+        			No aux = exclusao.getChildDireito();
+        			while(aux.getChildEsquerdo() != null) {
+        				aux = aux.getChildEsquerdo();
+        			}	
+        			int elementoLastChild = (int) aux.getElemento();
+        			this.remover(elementoLastChild);
+        			exclusao.setElemento(elementoLastChild);
+        			this.size--;
         		}
         	} else throw new ElNaoEncontradoException("Elemento não contido na arvore binaria");
         }
