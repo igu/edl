@@ -2,8 +2,6 @@ package ArvoreBinaria;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ArvoreBinariaImpl implements ArvoreBinaria {
     
@@ -22,9 +20,9 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     public boolean inserir(Object elem) {
         if (this.root != null) { // existe um no raiz
            No pai = this.buscar(elem, this.root);
-           No novoFilho = new No(elem, null, null, pai);
+           No novoFilho = new No(elem, pai, null, null);
            if((int) pai.getElemento() == (int) novoFilho.getElemento()) { // n pode igual
-        	   return false;
+        	   return false; // implementar excecao dps
            } else {
         	   if((int) novoFilho.getElemento() < (int) pai.getElemento()) {
         		   pai.setChildEsquerdo(novoFilho);
@@ -40,13 +38,36 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     @Override
     public No buscar(Object elem, No raiz) {
         if (this.isExternal(raiz) || (int) elem == (int) raiz.getElemento()) return raiz;
-        else if ((int) elem < (int) raiz.getElemento()) return buscar(elem, raiz.getChildEsquerdo());
-        else return buscar(elem, raiz.getChildDireito());
+        else if ((int) elem < (int) raiz.getElemento() && this.containsChildEsquerdo(raiz)) return buscar(elem, raiz.getChildEsquerdo());
+        else if ((int) elem > (int) raiz.getElemento() && this.containsChildDireito(raiz)) return buscar(elem, raiz.getChildDireito());
+        return raiz;
     }
 
     @Override
-    public boolean remover(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void remover(Object elem) throws ElNaoEncontradoException {
+        if(this.root != null) { // arvore vazia
+        	No exclusao = this.buscar(elem, this.root);
+        	if((int) elem == (int) exclusao.getElemento()) {
+        		if(this.countChilds(exclusao) == 0) { // EXCLUIR NÓ SEM FILHOS
+        			if(this.root == exclusao) {
+        				this.root = null;
+        				this.size--;
+        			}else {
+        				if(exclusao.getPai().getChildDireito() == exclusao) {
+        					exclusao.getPai().setChildDireito(null);
+        				}else {
+        					exclusao.getPai().setChildEsquerdo(null);
+        				}
+        				exclusao.setPai(null);
+        				this.size--;
+        			}
+        		}else if(this.countChilds(exclusao) == 1) { // EXCLUIR NÓ COM UM FILHO
+        			
+        		}else if(this.countChilds(exclusao) == 2) { // EXCLUIR NÓ COM DOIS FILHOS 
+        			
+        		}
+        	} else throw new ElNaoEncontradoException("Elemento não contido na arvore");
+        }
     }
 
     @Override
