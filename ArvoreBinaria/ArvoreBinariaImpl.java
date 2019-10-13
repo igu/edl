@@ -19,24 +19,29 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     }
     
     @Override
-    public void inserir(Object elem) {
+    public boolean inserir(Object elem) {
         if (this.root != null) { // existe um no raiz
-           No pai;
-            try {
-                pai = this.buscar(elem);
-            } catch (ElNaoEncontradoException ex) {
-                System.out.println("Elemento não encontrado");
-            }
-          // No novoNo = new No(elem, null, null, pai);
-        } else {
-           this.root = new No(elem, null, null, null);
-           this.size++;
-        }
+           No pai = this.buscar(elem, this.root);
+           No novoFilho = new No(elem, null, null, pai);
+           if((int) pai.getElemento() == (int) novoFilho.getElemento()) { // n pode igual
+        	   return false;
+           } else {
+        	   if((int) novoFilho.getElemento() < (int) pai.getElemento()) {
+        		   pai.setChildEsquerdo(novoFilho);
+        	   } else {
+        		   pai.setChildDireito(novoFilho);
+        	   }
+           }
+        } else this.root = new No(elem, null, null, null);
+        this.size++;
+        return true;
     }
 
     @Override
-    public No buscar(Object elem) throws ElNaoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public No buscar(Object elem, No raiz) {
+        if (this.isExternal(raiz) || (int) elem == (int) raiz.getElemento()) return raiz;
+        else if ((int) elem < (int) raiz.getElemento()) return buscar(elem, raiz.getChildEsquerdo());
+        else return buscar(elem, raiz.getChildDireito());
     }
 
     @Override
@@ -46,15 +51,11 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
 
     @Override
     public ArrayList<No> nos(int mode) {
-    	
        this.nosArrayList = new ArrayList<No>();
-       if(mode == 1) {
-    	   this.preOrdem(this.root);
-       }else if(mode == 2){
-    	   this.inOrdem(this.root);
-       } else if(mode == 3) {
-    	  this.posOrdem(this.root);
-       }
+       
+       if(mode == 1) this.preOrdem(this.root);
+       else if(mode == 2) this.inOrdem(this.root);
+       else if(mode == 3) this.posOrdem(this.root);
        
        return this.nosArrayList;
     }
