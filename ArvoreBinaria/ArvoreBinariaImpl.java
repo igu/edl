@@ -101,9 +101,9 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
         				aux = aux.getChildEsquerdo();
         			}	
         			int elementoLastChild = (int) aux.getElemento();
+        			System.out.println("Trocado por: " + elementoLastChild);
         			this.remover(elementoLastChild);
         			exclusao.setElemento(elementoLastChild);
-        			this.size--;
         		}
         	} else throw new ElNaoEncontradoException("Elemento não contido na arvore binaria");
         }
@@ -122,16 +122,16 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
 
     @Override
     public int height(No no) {
-        if(this.isExternal(no) || no == null) return 0;
+        if(no == null || this.isExternal(no)) return 0;
         else {
-        	int i = 0, h = 0;
+        	int h = 0;
         	
         	List<No> childs = new ArrayList<No>();
         	childs.add(no.getChildEsquerdo());
         	childs.add(no.getChildDireito());
         	
-        	while(i < childs.size()) {
-        		h = Math.max(h, this.height(childs.get(i++)));
+        	for(int i = 0; i < childs.size(); i++) {
+        		h = Math.max(h, this.height(childs.get(i)));
         	}
         	return 1 + h;
         }
@@ -209,6 +209,24 @@ public class ArvoreBinariaImpl implements ArvoreBinaria {
     @Override
     public void display() {
     	
-    }
+    	int k = 0, colunas = this.size, linhas = this.height(this.root) + 1;
+    	int matrix[][] = new int[linhas][colunas];
+    	ArrayList<No> nosContains = this.nos(2);
+    	while(k < this.size) {
+    		matrix[ this.profundidade(nosContains.get(k)) ][ k ] = (int) nosContains.get(k).getElemento();
+    		k++;
+    	}
+    	
+    	 for(int i = 0; i < linhas; i++) {
+             for(int j = 0; j < colunas; j++) {
+                 if(matrix[i][j] != 0) System.out.print(matrix[i][j] + "   "); 
+                 else System.out.print("   ");
+             }
+             System.out.print("\n");
+         }
+     }
     
+    public int getSize() {
+    	return size;
+    }
 }
