@@ -53,28 +53,34 @@ public class HeapImpl implements Heap {
         int i = 1, k;
         int childRightIndex;
         int childLeftIndex;
+        boolean folha = true, maior_que_ka = true;
 
         do {
             childRightIndex = 2 * i + 1;
             childLeftIndex = 2 * i;
 
-            if (childRightIndex <= this.size) {
-                if ((int) this.heapArray[childRightIndex] < (int) this.heapArray[childLeftIndex]) {
-                    k = childRightIndex;
+            if (this.containsChildEsquerdo(i)) {
+                if (this.containsChildDireito(i)) {
+                    if ((int) this.heapArray[childRightIndex] < (int) this.heapArray[childLeftIndex]) {
+                        k = childRightIndex;
+                    } else {
+                        k = childLeftIndex;
+                    }
                 } else {
                     k = childLeftIndex;
                 }
+                if (((int) this.heapArray[k]) < ((int) this.heapArray[i])) {
+                    int aux = (int) this.heapArray[k];
+                    this.heapArray[k] = (int) this.heapArray[i];
+                    this.heapArray[i] = aux;
+                } else {
+                    maior_que_ka = false;
+                }
+                i = k;
             } else {
-                k = childLeftIndex;
-            }
-
-            if (((int) this.heapArray[k]) < ((int) this.heapArray[i])) {
-                int aux = (int) this.heapArray[k];
-                this.heapArray[k] = (int) this.heapArray[i];
-                this.heapArray[i] = aux;
-            }
-            i = k;
-        } while (childLeftIndex < this.size);
+                folha = false;
+            }           
+        } while (folha && maior_que_ka);
 
         // Downheap termina quando a chave k encontra uma folha ou um nó 
         // cuja chave é maior do que k
