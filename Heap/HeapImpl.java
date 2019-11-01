@@ -122,8 +122,9 @@ public class HeapImpl implements Heap {
         if (this.containsChildEsquerdo(index)) {
             this.inOrdem(index * 2);
         }
-
+        
         this.inteirosHeap.add(index);
+        index /= 2;
 
         if (this.containsChildDireito(index)) {
             this.inOrdem(index * 2 + 1);
