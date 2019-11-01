@@ -119,13 +119,24 @@ public class HeapImpl implements Heap {
     }
 
     private void inOrdem(int index) {
-        if (this.containsChildEsquerdo(index)) {
+        if (this.containsChildEsquerdo(index) ) {
             this.inOrdem(index * 2);
         }
         
-        this.inteirosHeap.add(index);
-        index /= 2;
-
+       if(index <= this.size) {
+            this.inteirosHeap.add(index);
+            index /= 2;
+            if(!this.inteirosHeap.contains(index)) {
+                this.inteirosHeap.add(index);
+            }
+            else {
+                index /= 2;
+                if(!this.inteirosHeap.contains(index)) this.inteirosHeap.add(index);
+            }
+        }
+        
+        if(this.inteirosHeap.size() == this.size) return;
+        
         if (this.containsChildDireito(index)) {
             this.inOrdem(index * 2 + 1);
         }
@@ -133,9 +144,9 @@ public class HeapImpl implements Heap {
 
     @Override
     public boolean containsChildDireito(int index) {
-        index *= 2 + 1;
-        if (index <= this.size) {
-            if (this.heapArray[index] != null) {
+        int contem = index * 2 + 1;
+        if (contem <= this.size) {
+            if (this.heapArray[contem] != null) {
                 return true;
             }
         }
@@ -144,9 +155,9 @@ public class HeapImpl implements Heap {
 
     @Override
     public boolean containsChildEsquerdo(int index) {
-        index *= 2;
-        if (index <= this.size) {
-            if (this.heapArray[index] != null) {
+        int contem = index * 2;
+        if (contem <= this.size) {
+            if (this.heapArray[contem] != null) {
                 return true;
             }
         }
