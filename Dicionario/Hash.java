@@ -5,6 +5,7 @@ public class Hash {
     private int tabelaHash[];
     private int size;
     private int afterPrimo;
+    private boolean linearProb;
 
     public Hash() {
         this.tabelaHash = new int[13];
@@ -14,8 +15,8 @@ public class Hash {
     public void insertProbing() {
     }
 
-    public void insertDuplo(int k) {
-
+    public void insert(int k) {
+        this.linearProb = false;
         if (this.fiftyPerCent()) {
             int novaHash[] = new int[this.afterPrimo(this.tabelaHash.length)];
             for (int i = 0; i < this.size; i++) {
@@ -45,14 +46,14 @@ public class Hash {
         if (this.fiftyPerCent()) {
             // DUPLICAR
         } else {
-            if(this.tabelaHash[this.hashCode(k)] == 0) {
+            if (this.tabelaHash[this.hashCode(k)] == 0) {
                 this.tabelaHash[this.hashCode(k)] = k;
                 this.size++;
             } else {
                 boolean encontre = true;
                 int i = 1;
-                while(encontre) {
-                    if(this.tabelaHash[this.hashCode(k) + i] == 0) {
+                while (encontre) {
+                    if (this.tabelaHash[this.hashCode(k) + i] == 0) {
                         this.tabelaHash[this.hashCode(k) + i] = k;
                         this.size++;
                         encontre = false;
@@ -103,11 +104,17 @@ public class Hash {
 
     public int hashCodeDuplo(int k, int j) {
         int befPrimo = this.beforePrimo(this.tabelaHash.length);
-        return (k + j) * (befPrimo - k) % befPrimo;
+        return k + j * this.h2(k);
     }
 
-    public int hashCode(int k) {
-        return k % this.tabelaHash.length;
+    public int h2(int k) {
+        if (linearProb) {
+            return 1;
+        } else {
+            int befPrimo = this.beforePrimo(this.tabelaHash.length);
+            return (befPrimo - k) % befPrimo;
+        }
+
     }
 
 }
