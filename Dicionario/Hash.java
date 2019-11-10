@@ -4,66 +4,56 @@ public class Hash {
 
     private int tabelaHash[];
     private int size;
-    private int afterPrimo;
-    private boolean linearProb;
 
     public Hash() {
         this.tabelaHash = new int[13];
         this.size = 0;
     }
-
-    public void insertProbing() {
+    
+    public int size() {
+        return this.size;
+    }
+    
+    public boolean isEmpty() {
+        return this.size() == 0;
     }
 
-    public void insert(int k) {
-        this.linearProb = false;
+    public void insert(int k, int mode) {
+        if (mode > 1 || mode < 0) {
+            mode = 1; // so pode ser 0 ou 1 0 = probing 1 = duplo
+        }
         if (this.fiftyPerCent()) {
-            int novaHash[] = new int[this.afterPrimo(this.tabelaHash.length)];
-            for (int i = 0; i < this.size; i++) {
-
-            }
-
+            this.resize();
         } else {
             // k + j * (q - k mod q) % tabelaHash.length
             boolean encontrado = true;
-            if (this.tabelaHash[this.hashCode(k)] == 0) {
-                this.tabelaHash[this.hashCode(k)] = k;
-                this.size++;
-            } else {
-                for (int j = 0; j < this.tabelaHash.length && encontrado == true; j++) {
-                    if (this.tabelaHash[this.hashCodeDuplo(k, j)] == 0) {
-                        this.tabelaHash[this.hashCodeDuplo(k, j)] = k;
-                        encontrado = false;
-                        this.size++;
-                    }
+            for (int j = 0; j < this.tabelaHash.length && encontrado == true; j++) {
+                if (this.tabelaHash[this.hashCodeDuplo(k, j, mode)] == 0) {
+                    this.tabelaHash[this.hashCodeDuplo(k, j, mode)] = k;
+                    encontrado = false;
+                    this.size++;
                 }
             }
-
         }
     }
 
-    public void insertProbing(int k) {
-        if (this.fiftyPerCent()) {
-            // DUPLICAR
-        } else {
-            if (this.tabelaHash[this.hashCode(k)] == 0) {
-                this.tabelaHash[this.hashCode(k)] = k;
-                this.size++;
-            } else {
-                boolean encontre = true;
-                int i = 1;
-                while (encontre) {
-                    if (this.tabelaHash[this.hashCode(k) + i] == 0) {
-                        this.tabelaHash[this.hashCode(k) + i] = k;
-                        this.size++;
-                        encontre = false;
-                    } else {
-                        encontre = true;
+    public void resize() {
+        int aftPrimo = this.beforePrimo(this.tabelaHash.length);
+        System.out.println(aftPrimo);
+        int novaHash[] = new int[aftPrimo];
+        int mode = 1;
+        for (int i = 0; i < this.tabelaHash.length; i++) {
+            if (this.tabelaHash[i] != 0) {
+                boolean encontrado = true;
+                for (int j = 0; j < this.tabelaHash.length && encontrado == true; j++) {
+                    if (novaHash[this.hashCodeDuplo(this.tabelaHash[i], j, mode)] == 0) {
+                        novaHash[this.hashCodeDuplo(this.tabelaHash[i], j, mode)] = this.tabelaHash[i];
+                        encontrado = false;
                     }
-                    i++;
                 }
             }
         }
+        this.tabelaHash = novaHash;
     }
 
     public boolean fiftyPerCent() {
@@ -102,19 +92,16 @@ public class Hash {
         }
     }
 
-    public int hashCodeDuplo(int k, int j) {
-        int befPrimo = this.beforePrimo(this.tabelaHash.length);
-        return k + j * this.h2(k);
+    public int hashCodeDuplo(int k, int j, int mode) {
+        return k + j * this.h2(k, mode);
     }
 
-    public int h2(int k) {
-        if (linearProb) {
+    public int h2(int k, int mode) {
+        if (mode == 1) { // linear probing
             return 1;
         } else {
             int befPrimo = this.beforePrimo(this.tabelaHash.length);
             return (befPrimo - k) % befPrimo;
         }
-
     }
-
 }
