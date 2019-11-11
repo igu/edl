@@ -39,11 +39,20 @@ public class Hash {
 
     public int findElement(int k, int index, int mode) throws NotElementFoundException {
         if (mode > 1 || mode < 0) {
-            mode = 1; // so pode ser 0 ou 1 0 = probing 1 = duplo
+            mode = 1; 
+            /*
+                 so pode ser 0 ou 1 
+                0 = probing 1 = duplo 
+            */
         }
 
         if (index > 1 || index < 0) {
-            index = 1; // retornar index ou retornar elemento 0 = index 1 = elemento
+            index = 1; 
+            /* 
+                retornar index ou retornar 
+                    elemento 0 = index 1 = elemento
+            */
+            
         }
 
         int j = 0;
@@ -51,7 +60,7 @@ public class Hash {
             while (j++ < this.tabelaHash.length) {
                 int indice = this.hashCodeDuplo(k, j, mode);
                 int valor = this.tabelaHash[indice];
-                if (valor == k) {
+                if (valor != 0 && valor == k) {
                     if (index == 0) {
                         return indice;
                     }
