@@ -9,11 +9,11 @@ public class Hash {
         this.tabelaHash = new int[13];
         this.size = 0;
     }
-
+    
     public int size() {
         return this.size;
     }
-
+    
     public boolean isEmpty() {
         return this.size() == 0;
     }
@@ -35,42 +35,6 @@ public class Hash {
                 }
             }
         }
-    }
-
-    public int findElement(int k, int index, int mode) throws NotElementFoundException {
-        if (mode > 1 || mode < 0) {
-            mode = 1; // so pode ser 0 ou 1 0 = probing 1 = duplo
-        }
-
-        if (index > 1 || index < 0) {
-            index = 1; // retornar index ou retornar elemento 0 = index 1 = elemento
-        }
-
-        int j = 0;
-        try {
-            while (j++ < this.tabelaHash.length) {
-                int indice = this.hashCodeDuplo(k, j, mode);
-                int valor = this.tabelaHash[indice];
-                if (valor == k) {
-                    if (index == 0) {
-                        return indice;
-                    }
-                    return valor;
-                }
-            }
-        } catch (Exception e) {
-            throw new NotElementFoundException("NO_SUCH_KEY");
-        }
-        return 0;
-    }
-
-    public int removeElement(int k, int mode) throws NotElementFoundException {
-        int indice = this.findElement(k, 0, mode);
-        int elemento = this.tabelaHash[indice];
-        System.out.println(elemento);
-        this.tabelaHash[indice] = 0; // zera o elemtento
-        this.size--;
-        return elemento;
     }
 
     public void resize() {
@@ -129,7 +93,7 @@ public class Hash {
     }
 
     public int hashCodeDuplo(int k, int j, int mode) {
-        return (k + j * this.h2(k, mode)) % this.tabelaHash.length;
+        return k + j * this.h2(k, mode);
     }
 
     public int h2(int k, int mode) {
@@ -138,12 +102,6 @@ public class Hash {
         } else {
             int befPrimo = this.beforePrimo(this.tabelaHash.length);
             return (befPrimo - k) % befPrimo;
-        }
-    }
-    
-    public void display() {
-        for(int i = 0; i < this.tabelaHash.length; i++) {
-            System.out.println("|" + i + "|" + "|" + this.tabelaHash[i] + "|");
         }
     }
 }
