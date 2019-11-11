@@ -20,7 +20,11 @@ public class Hash {
 
     public void insert(int k, int mode) {
         if (mode > 1 || mode < 0) {
-            mode = 1; // so pode ser 0 ou 1 0 = probing 1 = duplo
+            mode = 1; 
+            /*
+                 so pode ser 0 ou 1 
+                0 = duplo 1 = probing 
+            */
         }
         if (this.fiftyPerCent()) {
             this.resize();
@@ -42,7 +46,7 @@ public class Hash {
             mode = 1; 
             /*
                  so pode ser 0 ou 1 
-                0 = probing 1 = duplo 
+                0 = duplo 1 = probing 
             */
         }
 
@@ -97,7 +101,8 @@ public class Hash {
                     }
                 }
             }
-        }
+        } // k + j * 1 mod tamanho do array 
+        // k + j * (q - k mod q) mod tamanho do array
         this.tabelaHash = novaHash;
     }
 
@@ -115,7 +120,7 @@ public class Hash {
                     contador++;
                 }
             }
-            if (contador == 2) {
+            if (contador == 0) {
                 return aftPrimo;
             }
         }
@@ -131,7 +136,7 @@ public class Hash {
                     contador++;
                 }
             }
-            if (contador == 2) {
+            if (contador == 0) {
                 return befPrimo;
             }
         }
@@ -151,8 +156,10 @@ public class Hash {
     }
     
     public void display() {
+        System.out.println("|KEY| |ELEMENTO|");
         for(int i = 0; i < this.tabelaHash.length; i++) {
-            System.out.println("|" + i + "|" + "|" + this.tabelaHash[i] + "|");
+            System.out.print("|" + i + "|" + " |" + this.tabelaHash[i] + "| ");
         }
+        System.out.println("\n");
     }
 }
