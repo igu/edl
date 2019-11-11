@@ -32,8 +32,9 @@ public class Hash {
             // k + j * (q - k mod q) % tabelaHash.length
             boolean encontrado = true;
             for (int j = 0; j < this.tabelaHash.length && encontrado == true; j++) {
-                if (this.tabelaHash[this.hashCodeDuplo(k, j, mode)] == 0) {
-                    this.tabelaHash[this.hashCodeDuplo(k, j, mode)] = k;
+                int indice = this.hashCodeDuplo(k, j, mode);
+                if (this.tabelaHash[indice] == 0) {
+                    this.tabelaHash[indice] = k;
                     encontrado = false;
                     this.size++;
                 }
@@ -118,7 +119,7 @@ public class Hash {
             int i = 2, contador = 0;
             aftPrimo += 1;
             for (i = 2; i < aftPrimo; i++) {
-                if (n % i == 0) {
+                if (aftPrimo % i == 0) {
                     contador++;
                 }
             }
@@ -134,7 +135,7 @@ public class Hash {
             int i = 2, contador = 0;
             befPrimo -= 1;
             for (i = 2; i < befPrimo; i++) {
-                if (n % i == 0) {
+                if (befPrimo % i == 0) {
                     contador++;
                 }
             }
@@ -145,6 +146,7 @@ public class Hash {
     }
 
     public int hashCodeDuplo(int k, int j, int mode) {
+        int resul = this.h2(k, mode);
         return (k + j * this.h2(k, mode)) % this.tabelaHash.length;
     }
 
@@ -153,15 +155,19 @@ public class Hash {
             return 1;
         } else {
             int befPrimo = this.beforePrimo(this.tabelaHash.length);
-            return (befPrimo - k) % befPrimo;
+            return befPrimo - k % befPrimo;
         }
     }
     
     public void display() {
         System.out.println("|KEY| |ELEMENTO|");
+        String key = "";
+        String elem = "";
         for(int i = 0; i < this.tabelaHash.length; i++) {
-            System.out.print("|" + i + "|" + " |" + this.tabelaHash[i] + "| ");
+            key += "|" + i + "| ";
+            elem += "|" + this.tabelaHash[i] + "| ";
         }
-        System.out.println("\n");
+        System.out.println(key);
+        System.out.println(elem);
     }
 }
