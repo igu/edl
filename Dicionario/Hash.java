@@ -64,11 +64,13 @@ public class Hash {
             while (j++ < this.tabelaHash.length) {
                 int indice = this.hashCodeDuplo(k, j, mode);
                 int valor = this.tabelaHash[indice];
-                if (valor != 0 && valor == k) {
+                if (valor == k) {
                     if (index == 0) {
                         return indice;
                     }
                     return valor;
+                } else if(valor != 0 && mode == 1) {
+                    throw new NotElementFoundException("NO_SUCH_KEY");
                 }
             }
         } catch (Exception e) {
