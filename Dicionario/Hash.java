@@ -69,7 +69,7 @@ public class Hash {
                         return indice;
                     }
                     return valor;
-                } else if(valor != 0 && mode == 1) {
+                } else if(valor == 0 && mode == 1) {
                     throw new NotElementFoundException("NO_SUCH_KEY");
                 }
             }
