@@ -1,7 +1,14 @@
 package edl.Sequencia;
 
-import edl.Lista.No;
-import edl.Vector.EVectorNotExists;
+import Lista.No;
+import Vector.EVectorNotExists;
+
+/* 
+  Obs {
+    * As importações necessárias está contida no package: Lista  
+  }
+  by: github @igu  
+*/ 
 
 public interface Sequencia {
 

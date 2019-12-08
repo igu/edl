@@ -1,7 +1,7 @@
 package edl.Sequencia;
 
-import edl.Lista.No;
-import edl.Vector.EVectorNotExists;
+import Lista.No;
+import Vector.EVectorNotExists;
 
 public class SequenciaImpl implements Sequencia {
 	

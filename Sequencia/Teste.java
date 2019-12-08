@@ -2,7 +2,7 @@ package edl.Sequencia;
 
 import java.util.Scanner;
 
-import edl.Vector.EVectorNotExists;
+import Vector.EVectorNotExists;
 
 
 public class Teste {
