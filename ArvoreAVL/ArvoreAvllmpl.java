@@ -3,6 +3,8 @@ package ArvoreAVL;
 import ArvoreBinaria.ArvoreBinariaImpl;
 
 public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
+    
+    // SLIDE 14;22 
 
     public boolean inserir(Object elem) {
         if (this.root != null) {
