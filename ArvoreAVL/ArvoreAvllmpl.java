@@ -48,15 +48,52 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
             ((NoAVL) no.getPai()).setFatorB((op.equals("INSERT") ? ++fatorPai : --fatorPai));
         }
 
-        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < - 1) // tem que balancear
+        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < - 1)
+        	this.balancear( (NoAVL) no.getPai() );
         
         this.attFb((NoAVL) no.getPai(), op); // recusao
     }
+    
+    @Override
+	public void balancear(NoAVL pai) {
+    	
+
+    	if(pai.getFatorB() == -2) {
+    		
+    		if( ((NoAVL) pai.getChildDireito()).getFatorB() > 0  ) {
+    			// ROTACAO DUPLA ESQUERDA
+    		} else {
+    			this.rotSimLeft(pai);
+    		}
+
+    	} else {
+    		if( ((NoAVL) pai.getChildEsquerdo()).getFatorB() < 0  ) {
+    			// ROTACAO DUPLA DIREITA
+    		} else {
+    			// ROTACAO SIMPLES DIREITA
+    		}
+    	}
+    	
+		
+	}
 
     @Override
-    public void rotSimLeft() {
-        // TODO Auto-generated method stub
-
+    public void rotSimLeft(NoAVL pai) {
+    	
+    	NoAVL noB = pai; // NO5
+    	NoAVL noA = (NoAVL) pai.getChildDireito(); // NO10
+    	
+    	
+    	
+    	noA.setPai( noB.getPai() );
+    	noA.getChildEsquerdo().setPai( noB );
+    	noB.setChildDireito(noA.getChildEsquerdo() );
+    	noA.setChildEsquerdo( noB );
+    	noB.setPai( noA );
+    	
+    	
+    	// testar ;;;;;
+    	
     }
 
     @Override
