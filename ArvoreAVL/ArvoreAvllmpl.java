@@ -1,6 +1,8 @@
 package ArvoreAVL;
 
 import ArvoreBinaria.ArvoreBinariaImpl;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     
@@ -48,7 +50,7 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
             ((NoAVL) no.getPai()).setFatorB((op.equals("INSERT") ? ++fatorPai : --fatorPai));
         }
 
-        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < - 1)
+        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < -1)
         	this.balancear( (NoAVL) no.getPai() );
         
         this.attFb((NoAVL) no.getPai(), op); // recusao
@@ -86,10 +88,25 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     	
     	
     	noA.setPai( noB.getPai() );
-    	noA.getChildEsquerdo().setPai( noB );
+    	noA.getChildEsquerdo().setPai( noB ); // null point exception
     	noB.setChildDireito(noA.getChildEsquerdo() );
     	noA.setChildEsquerdo( noB );
     	noB.setPai( noA );
+        
+        
+        int fb_b_novo = noB.getFatorB() + 1 - min(noA.getFatorB(), 0);
+        int fb_a_novo = noA.getFatorB() + 1 - max(noB.getFatorB(), 0);
+        
+        noB.setFatorB(fb_b_novo);
+        noA.setFatorB(fb_a_novo);
+        
+        /*
+        
+        FB_B_novo= FB_B + 1 - min(FB_A, 0);
+        FB_A_novo= FB_A + 1 +max(FB_B_novo, 0);
+        
+        
+        */
     	
     	
     	// testar ;;;;;
