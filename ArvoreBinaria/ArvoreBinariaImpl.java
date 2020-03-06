@@ -5,9 +5,9 @@ import java.util.List;
 
 public class ArvoreBinariaImpl implements ArvoreBinaria {
     
-    private No root = null;
-    private ArrayList<No> nosArrayList = null; 
-    private int size = 0;
+    protected No root = null;
+    protected ArrayList<No> nosArrayList = null; 
+    protected int size = 0;
     
     public ArvoreBinariaImpl() { } // Arvore iniciando sem raiz
     
