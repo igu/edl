@@ -1,12 +1,13 @@
 package ArvoreAVL;
 
 import ArvoreBinaria.ArvoreBinariaImpl;
+import ArvoreBinaria.No;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import java.util.ArrayList;
 
 public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     
-    // SLIDE 14;22 
 
     public boolean inserir(Object elem) {
         if (this.root != null) {
@@ -36,13 +37,9 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     @Override
     public void attFb(NoAVL no, String op) {
 
-        if (op.equals("INSERT")) {
-            if (this.isRoot(no) || ((NoAVL) no.getPai()).getFatorB() == 0) return;
-                 // CODNIÇÃO DE FINAL ENCONTROU O RAIZ OU UM PAI COM FATOR == 0
-        } else {
-            if (this.isRoot(no) || ((NoAVL) no.getPai()).getFatorB() != 0) return;
-        }
-        
+    
+        if (this.isRoot(no)) return;
+ 
         int fatorPai = ((NoAVL) no.getPai()).getFatorB();
         if ((int) no.getPai().getElemento() < (int) no.getElemento()) {
             ((NoAVL) no.getPai()).setFatorB((op.equals("INSERT") ? --fatorPai : ++fatorPai));
@@ -50,29 +47,35 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
             ((NoAVL) no.getPai()).setFatorB((op.equals("INSERT") ? ++fatorPai : --fatorPai));
         }
 
-        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < -1)
-        	this.balancear( (NoAVL) no.getPai() );
-        
-        this.attFb((NoAVL) no.getPai(), op); // recusao
+        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < -1) {
+            this.balancear( (NoAVL) no.getPai() );
+        } else {
+            if (op.equals("INSERT")) {
+                if (((NoAVL) no.getPai()).getFatorB() == 0) return;
+            } else {
+                if (((NoAVL) no.getPai()).getFatorB() != 0) return;
+            }
+            this.attFb((NoAVL) no.getPai(), op); // recusao
+        }   
     }
     
     @Override
-	public void balancear(NoAVL pai) {
+	public void balancear(NoAVL noDesregulado) {
     	
 
-    	if(pai.getFatorB() == -2) {
+    	if(noDesregulado.getFatorB() == -2) {
     		
-    		if( ((NoAVL) pai.getChildDireito()).getFatorB() > 0  ) {
+    		if( ((NoAVL) noDesregulado.getChildDireito()).getFatorB() > 0  ) {
     			// ROTACAO DUPLA ESQUERDA
     		} else {
-    			this.rotSimLeft(pai);
+    			this.rotSimLeft(noDesregulado);
     		}
 
     	} else {
-    		if( ((NoAVL) pai.getChildEsquerdo()).getFatorB() < 0  ) {
+    		if( ((NoAVL) noDesregulado.getChildEsquerdo()).getFatorB() < 0  ) {
     			// ROTACAO DUPLA DIREITA
     		} else {
-    			// ROTACAO SIMPLES DIREITA
+    			this.rotSimRight(noDesregulado);
     		}
     	}
     	
@@ -80,48 +83,77 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
 	}
 
     @Override
-    public void rotSimLeft(NoAVL pai) {
-    	
-    	NoAVL noB = pai; // NO5
-    	NoAVL noA = (NoAVL) pai.getChildDireito(); // NO10
-    	
-    	
-    	
-    	noA.setPai( noB.getPai() );
-    	noA.getChildEsquerdo().setPai( noB ); // null point exception
-    	noB.setChildDireito(noA.getChildEsquerdo() );
-    	noA.setChildEsquerdo( noB );
-    	noB.setPai( noA );
+    public void rotSimLeft(NoAVL noDesregulado) {
         
+        NoAVL noA = noDesregulado;
+        NoAVL noB = (NoAVL) noDesregulado.getChildDireito();
         
-        int fb_b_novo = noB.getFatorB() + 1 - min(noA.getFatorB(), 0);
-        int fb_a_novo = noA.getFatorB() + 1 - max(noB.getFatorB(), 0);
+        noB.setPai ( noA.getPai() );
+        if( this.containsChildEsquerdo(noB) ) {
+            noB.getChildEsquerdo().setPai( noA );
+        }
+        noA.setChildDireito( noB.getChildEsquerdo() );
+        noB.setChildEsquerdo( noA );
+        noA.setPai( noB );
         
-        noB.setFatorB(fb_b_novo);
-        noA.setFatorB(fb_a_novo);
+        int fb_a_novo = noB.getFatorB() + 1 - max(noA.getFatorB(), 0);
+        int fb_b_novo = noA.getFatorB() + 1 - min(noB.getFatorB(), 0);
         
-        /*
+        noA.setFatorB(fb_b_novo);
+        noB.setFatorB(fb_a_novo);
         
-        FB_B_novo= FB_B + 1 - min(FB_A, 0);
-        FB_A_novo= FB_A + 1 +max(FB_B_novo, 0);
-        
-        
-        */
-    	
-    	
-    	// testar ;;;;;
+        if( noDesregulado == this.root) {
+            this.root = noB;
+        }
     	
     }
 
     @Override
-    public void rotSimRight() {
-        // TODO Auto-generated method stub
-
+    public void rotSimRight(NoAVL noDesregulado) {
+       
+        NoAVL noA = noDesregulado;
+        NoAVL noB = (NoAVL) noDesregulado.getChildEsquerdo();
+        
+        noB.setPai ( noA.getPai() );
+        if( this.containsChildDireito(noB) ) {
+            noB.getChildDireito().setPai( noA );
+        }
+        noA.setChildEsquerdo( noB.getChildDireito() );
+        noB.setChildDireito( noA );
+        noA.setPai( noB );
+        
+        int fb_a_novo = noA.getFatorB() - 1 - max(noB.getFatorB(), 0);
+        int fb_b_novo = noB.getFatorB() - 1 + min(noA.getFatorB(), 0);
+                
+        noA.setFatorB(fb_b_novo);
+        noB.setFatorB(fb_a_novo);
+        
+        if( noDesregulado == this.root) {
+            this.root = noB;
+        }
+        
     }
 
     @Override
     public void displayAVL() {
-        // TODO Auto-generated method stub
+        
+        
+        int k = 0, colunas = this.size, linhas = this.height(this.root) + 1;
+    	String matrix[][] = new String[linhas][colunas];
+    	ArrayList<No> nosContains = this.nos(2);
+    	while(k < this.size) {
+                String fb = "[" + ((NoAVL) nosContains.get(k)).getFatorB() + "]";
+    		matrix[ this.profundidade( nosContains.get(k)) ][ k ] =  (int) nosContains.get(k).getElemento() + fb;
+    		k++;
+    	}
+    	
+    	 for(int i = 0; i < linhas; i++) {
+             for(int j = 0; j < colunas; j++) {
+                 if(matrix[i][j] != null) System.out.print(matrix[i][j]); 
+                 else System.out.print("   ");
+             }
+             System.out.print("\n");
+         }
 
     }
 
