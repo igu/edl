@@ -67,6 +67,8 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     		
     		if( ((NoAVL) noDesregulado.getChildDireito()).getFatorB() > 0  ) {
     			// ROTACAO DUPLA ESQUERDA
+    			this.rotSimRight( (NoAVL) noDesregulado.getChildDireito() );
+    			this.rotSimLeft(noDesregulado); 
     		} else {
     			this.rotSimLeft(noDesregulado);
     		}
@@ -74,6 +76,8 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     	} else {
     		if( ((NoAVL) noDesregulado.getChildEsquerdo()).getFatorB() < 0  ) {
     			// ROTACAO DUPLA DIREITA
+    			this.rotSimLeft( (NoAVL) noDesregulado.getChildEsquerdo() ); 
+    			this.rotSimRight(noDesregulado);
     		} else {
     			this.rotSimRight(noDesregulado);
     		}
