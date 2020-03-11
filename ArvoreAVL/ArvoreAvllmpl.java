@@ -1,6 +1,7 @@
 package ArvoreAVL;
 
 import ArvoreBinaria.ArvoreBinariaImpl;
+import ArvoreBinaria.ElNaoEncontradoException;
 import ArvoreBinaria.No;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -34,6 +35,75 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
         return true;
     }
 
+    public void remover(Object elem) throws ElNaoEncontradoException {
+    	if(this.root != null) { // arvore vazia
+        	NoAVL exclusao = (NoAVL) this.buscar(elem, this.root);
+        	
+        	if((int) elem == (int) exclusao.getElemento()) {
+        		if(this.countChilds(exclusao) == 0) { // EXCLUIR NÓ SEM FILHOS
+        			if(this.root == exclusao) { this.root = null; }
+        			else {
+        				
+        				this.attFb( (NoAVL) exclusao, "NO-INSERT"); // ATT-FB
+        				
+        				if(exclusao.getPai().getChildDireito() == exclusao) 
+        					exclusao.getPai().setChildDireito(null);
+        				else 
+        					exclusao.getPai().setChildEsquerdo(null);
+        				
+        				exclusao.setPai(null);	
+        			}
+        			this.size--;
+        		}else if(this.countChilds(exclusao) == 1) { // EXCLUIR NÓ COM UM FILHO
+        			
+        			NoAVL filhoOcupaPai;
+        			
+        			if(this.root == exclusao) { // excluir raiz
+        				
+        				filhoOcupaPai = (this.containsChildDireito(this.root)) 
+        						? 		(NoAVL) this.root.getChildDireito() 
+        					    : 		(NoAVL) this.root.getChildEsquerdo(); 
+        				
+        				filhoOcupaPai.setPai(null);
+        				
+        				this.attFb( (NoAVL) exclusao, "NO-INSERT"); // ATT-FB
+        				
+        				this.root = filhoOcupaPai;
+        			} else {
+        				
+        				this.attFb( (NoAVL) exclusao, "NO-INSERT"); // ATT-FB
+        				
+        				filhoOcupaPai = (this.containsChildDireito(exclusao)) 
+        						? 		(NoAVL) exclusao.getChildDireito() 
+        					    : 		(NoAVL) exclusao.getChildEsquerdo();
+        						
+        				filhoOcupaPai.setPai(exclusao.getPai());	
+        				
+        				if (exclusao.getPai().getChildDireito() == exclusao) 
+        					exclusao.getPai().setChildDireito(filhoOcupaPai);
+        				else 
+        				    exclusao.getPai().setChildEsquerdo(filhoOcupaPai);
+        				
+        				
+        				exclusao.setPai(null);
+        				exclusao.setChildDireito(null);
+        				exclusao.setChildEsquerdo(null);
+        			}
+        			this.size--;
+        		}else if(this.countChilds(exclusao) == 2) { // EXCLUIR NÓ COM DOIS FILHOS 
+        			/* pecorrer até encontrar o menor elemento dir/last esq */
+        			No aux = exclusao.getChildDireito();
+        			while(aux.getChildEsquerdo() != null) {
+        				aux = aux.getChildEsquerdo();
+        			}	
+        			int elementoLastChild = (int) aux.getElemento();
+        			this.remover(elementoLastChild);
+        			exclusao.setElemento(elementoLastChild);
+        		}
+        	} else throw new ElNaoEncontradoException("Elemento não contido na arvore binaria");
+        }
+    }
+    
     @Override
     public void attFb(NoAVL no, String op) {
 
@@ -67,24 +137,31 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     		
     		if( ((NoAVL) noDesregulado.getChildDireito()).getFatorB() > 0  ) {
     			// ROTACAO DUPLA ESQUERDA
+    		//	System.out.println("ROTACAO DUPLA ESQUERDA");
+    		//	System.out.println("NoDesregulado: " + noDesregulado.getElemento());
+    		//	System.out.println("FatorB: " + noDesregulado.getFatorB());
+    		//	System.out.println("SubArvoreDireita: " + noDesregulado.getChildDireito().getElemento() );
     			this.rotSimRight( (NoAVL) noDesregulado.getChildDireito() );
-    			this.rotSimLeft(noDesregulado); 
-    		} else {
-    			this.rotSimLeft(noDesregulado);
     		}
+	    	//	System.out.println("------------- ROT SIMPLES ESQUERDA ----------");
+			//	System.out.println("SubArvoreEsquerda POS ROT: " + noDesregulado.getChildEsquerdo().getElemento() );
+    			this.rotSimLeft(noDesregulado); 
 
     	} else {
     		if( ((NoAVL) noDesregulado.getChildEsquerdo()).getFatorB() < 0  ) {
     			// ROTACAO DUPLA DIREITA
-    			this.rotSimLeft( (NoAVL) noDesregulado.getChildEsquerdo() ); 
-    			this.rotSimRight(noDesregulado);
-    		} else {
-    			this.rotSimRight(noDesregulado);
+    			System.out.println("ROTACAO DUPLA DIREITA");
+    			System.out.println("NoDesregulado: " + noDesregulado.getElemento());
+    			System.out.println("FatorB: " + noDesregulado.getFatorB());
+    			System.out.println("SubArvoreEsquerda: " + noDesregulado.getChildEsquerdo().getElemento() );
+    			this.rotSimLeft( (NoAVL) noDesregulado.getChildEsquerdo() );
     		}
+    			System.out.println("------------- ROT SIMPLES DIREITA ----------");
+    			System.out.println("SubArvoreDireita POS ROT: " + noDesregulado.getChildDireito().getElemento() );
+    			this.rotSimRight(noDesregulado);
     	}
+    }
     	
-		
-	}
 
     @Override
     public void rotSimLeft(NoAVL noDesregulado) {
@@ -100,11 +177,20 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
         noB.setChildEsquerdo( noA );
         noA.setPai( noB );
         
-        int fb_a_novo = noB.getFatorB() + 1 - max(noA.getFatorB(), 0);
-        int fb_b_novo = noA.getFatorB() + 1 - min(noB.getFatorB(), 0);
+        int fb_a_novo = noA.getFatorB() + 1 - min(noB.getFatorB(), 0);
+        // FB_B_novo= FB_B + 1 - min(FB_A, 0); 
+        int fb_b_novo = noB.getFatorB() + 1 + max(fb_a_novo, 0);
+        // FB_A_novo= FB_A + 1 +max(FB_B_novo, 0);
         
-        noA.setFatorB(fb_b_novo);
-        noB.setFatorB(fb_a_novo);
+        noA.setFatorB(fb_a_novo);
+        noB.setFatorB(fb_b_novo);
+        
+        if ( noB.getPai() != null) {
+        	if (  (int) noB.getPai().getElemento() < (int) noB.getElemento() )
+        		noB.getPai().setChildDireito( noB );
+        	else 
+        		noB.getPai().setChildEsquerdo( noB );
+        }
         
         if( noDesregulado == this.root) {
             this.root = noB;
@@ -119,6 +205,7 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
         NoAVL noB = (NoAVL) noDesregulado.getChildEsquerdo();
         
         noB.setPai ( noA.getPai() );
+        
         if( this.containsChildDireito(noB) ) {
             noB.getChildDireito().setPai( noA );
         }
@@ -127,10 +214,20 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
         noA.setPai( noB );
         
         int fb_a_novo = noA.getFatorB() - 1 - max(noB.getFatorB(), 0);
-        int fb_b_novo = noB.getFatorB() - 1 + min(noA.getFatorB(), 0);
+        // FB_B_novo= FB_B - 1 - max(FB_A, 0);
+        
+        // FB_A_novo= FB_A - 1 + min(FB_B_novo, 0);
+        int fb_b_novo = noB.getFatorB() - 1 + min(fb_a_novo, 0);
                 
-        noA.setFatorB(fb_b_novo);
-        noB.setFatorB(fb_a_novo);
+        noA.setFatorB(fb_a_novo);
+        noB.setFatorB(fb_b_novo);
+        
+        if ( noB.getPai() != null) {
+        	if (  (int) noB.getPai().getElemento() < (int) noB.getElemento() )
+        		noB.getPai().setChildDireito( noB );
+        	else 
+        		noB.getPai().setChildEsquerdo( noB );
+        }
         
         if( noDesregulado == this.root) {
             this.root = noB;
@@ -160,5 +257,11 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
          }
 
     }
+    
+    // method para testes
+	@Override
+	public NoAVL getRoot() {
+		return (NoAVL) this.root;
+	}
 
 }
