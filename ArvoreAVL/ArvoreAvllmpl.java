@@ -106,65 +106,94 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
     
     @Override
     public void attFb(NoAVL no, String op) {
-
-    
-        if (this.isRoot(no)) return;
- 
-        int fatorPai = ((NoAVL) no.getPai()).getFatorB();
-        if ((int) no.getPai().getElemento() < (int) no.getElemento()) {
-            ((NoAVL) no.getPai()).setFatorB((op.equals("INSERT") ? --fatorPai : ++fatorPai));
-        } else {
-            ((NoAVL) no.getPai()).setFatorB((op.equals("INSERT") ? ++fatorPai : --fatorPai));
-        }
-
-        if (((NoAVL) no.getPai()).getFatorB() > 1 || ((NoAVL) no.getPai()).getFatorB() < -1) {
-            this.balancear( (NoAVL) no.getPai() );
-        } else {
-            if (op.equals("INSERT")) {
-                if (((NoAVL) no.getPai()).getFatorB() == 0) return;
+    	
+    	
+    	if ( op.equals("INSERT") ) {
+    		
+    		if ( no == null || this.isRoot(no) ) return;
+    		
+    		if ((int) no.getElemento() > (int) no.getPai().getElemento()  ) {
+                ((NoAVL) no.getPai()).setFatorB( ((NoAVL) no.getPai()).getFatorB() - 1 );
             } else {
-                if (((NoAVL) no.getPai()).getFatorB() != 0) return;
+            	((NoAVL) no.getPai()).setFatorB( ((NoAVL) no.getPai()).getFatorB() + 1 );
             }
-            this.attFb((NoAVL) no.getPai(), op); // recusao
-        }   
+    		
+    		if (((NoAVL) no.getPai()).getFatorB() != 0) {
+    			if ( ((NoAVL) no.getPai()).getFatorB() < -1 || ((NoAVL) no.getPai()).getFatorB() > 1) {
+    				this.balancear( (NoAVL) no.getPai(), op);
+    			} else {
+    				this.attFb( (NoAVL) no.getPai(), op);
+    			}
+    		}
+    		
+    		
+    		
+    		
+    	} else {
+    		
+    		
+    		if ( no == null || this.isRoot(no) ) return;
+    		
+    		if ((int) no.getElemento() > (int) no.getPai().getElemento()  ) {
+                ((NoAVL) no.getPai()).setFatorB( ((NoAVL) no.getPai()).getFatorB() + 1 );
+            } else {
+            	((NoAVL) no.getPai()).setFatorB( ((NoAVL) no.getPai()).getFatorB() - 1 );
+            }
+    		
+    		if ( ((NoAVL) no.getPai()).getFatorB() < -1 || ((NoAVL) no.getPai()).getFatorB() > 1) {
+				this.balancear( (NoAVL) no.getPai(), op);
+			}  else {
+				if (((NoAVL) no.getPai()).getFatorB() == 0) {
+					this.attFb( (NoAVL) no.getPai(), op);
+				}
+			}
+    		
+    	}
+
     }
     
     @Override
-	public void balancear(NoAVL noDesregulado) {
+	public void balancear(NoAVL noDesregulado, String op) {
     	
+    	NoAVL no;
 
     	if(noDesregulado.getFatorB() == -2) {
     		
-    		if( ((NoAVL) noDesregulado.getChildDireito()).getFatorB() > 0  ) {
+    		if( noDesregulado.getChildDireito() != null &&((NoAVL) noDesregulado.getChildDireito()).getFatorB() > 0  ) {
     			// ROTACAO DUPLA ESQUERDA
     		//	System.out.println("ROTACAO DUPLA ESQUERDA");
     		//	System.out.println("NoDesregulado: " + noDesregulado.getElemento());
     		//	System.out.println("FatorB: " + noDesregulado.getFatorB());
     		//	System.out.println("SubArvoreDireita: " + noDesregulado.getChildDireito().getElemento() );
-    			this.rotSimRight( (NoAVL) noDesregulado.getChildDireito() );
+    			no = this.rotSimRight( (NoAVL) noDesregulado.getChildDireito() );
     		}
 	    	//	System.out.println("------------- ROT SIMPLES ESQUERDA ----------");
 			//	System.out.println("SubArvoreEsquerda POS ROT: " + noDesregulado.getChildEsquerdo().getElemento() );
-    			this.rotSimLeft(noDesregulado); 
+    			no = this.rotSimLeft(noDesregulado); 
 
     	} else {
-    		if( ((NoAVL) noDesregulado.getChildEsquerdo()).getFatorB() < 0  ) {
+    		if( noDesregulado.getChildEsquerdo() != null && ((NoAVL) noDesregulado.getChildEsquerdo()).getFatorB() < 0  ) {
     			// ROTACAO DUPLA DIREITA
     			System.out.println("ROTACAO DUPLA DIREITA");
     			System.out.println("NoDesregulado: " + noDesregulado.getElemento());
     			System.out.println("FatorB: " + noDesregulado.getFatorB());
     			System.out.println("SubArvoreEsquerda: " + noDesregulado.getChildEsquerdo().getElemento() );
-    			this.rotSimLeft( (NoAVL) noDesregulado.getChildEsquerdo() );
+    			no = this.rotSimLeft( (NoAVL) noDesregulado.getChildEsquerdo() );
     		}
     			System.out.println("------------- ROT SIMPLES DIREITA ----------");
     			System.out.println("SubArvoreDireita POS ROT: " + noDesregulado.getChildDireito().getElemento() );
-    			this.rotSimRight(noDesregulado);
+    			no = this.rotSimRight(noDesregulado);
     	}
+    	
+    	if( op.equals("NO-INSERT") ) {
+    		this.attFb(no, op);
+    	}
+    	
     }
     	
 
     @Override
-    public void rotSimLeft(NoAVL noDesregulado) {
+    public NoAVL rotSimLeft(NoAVL noDesregulado) {
         
         NoAVL noA = noDesregulado;
         NoAVL noB = (NoAVL) noDesregulado.getChildDireito();
@@ -195,11 +224,13 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
         if( noDesregulado == this.root) {
             this.root = noB;
         }
+        
+        return noB;
     	
     }
 
     @Override
-    public void rotSimRight(NoAVL noDesregulado) {
+    public NoAVL rotSimRight(NoAVL noDesregulado) {
        
         NoAVL noA = noDesregulado;
         NoAVL noB = (NoAVL) noDesregulado.getChildEsquerdo();
@@ -232,6 +263,8 @@ public class ArvoreAvllmpl extends ArvoreBinariaImpl implements ArvoreAvl {
         if( noDesregulado == this.root) {
             this.root = noB;
         }
+        
+        return noB;
         
     }
 
