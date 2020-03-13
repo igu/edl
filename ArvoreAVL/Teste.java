@@ -8,22 +8,30 @@ public class Teste {
     public static void main(String[] args) throws ElNaoEncontradoException {
         ArvoreAvllmpl nova = new ArvoreAvllmpl();
         
-        nova.inserir(50);
-        nova.inserir(90);
-        nova.inserir(20);
-        nova.inserir(40);
-        nova.inserir(10);
-        nova.inserir(30);
-        nova.inserir(62);
-        
+        nova.inserir(1);
+        nova.inserir(2);
+        nova.inserir(3);
+        nova.inserir(4);
+        nova.inserir(5);
+        nova.inserir(6);
+        nova.inserir(7);
+        nova.inserir(8);
         
         nova.displayAVL();
         
-        nova.remover(62);
         
         System.out.println("----- POS EXCLUSAO -----");
-        
+        nova.remover(5);
        	nova.displayAVL();
+       	
+       	System.out.println("----- POS EXCLUSAO -----");
+        nova.remover(2);
+       	nova.displayAVL();
+       	
+       	System.out.println("----- POS EXCLUSAO -----");
+        nova.remover(4);
+       	nova.displayAVL();
+  
         
     }
     
