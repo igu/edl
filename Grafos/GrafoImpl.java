@@ -120,7 +120,7 @@ public class GrafoImpl implements Grafo {
 
         Object el = e.getEl();
 
-        if (!e.isHeaded()) {
+        if (e.isHeaded()) {
             ((ArrayList<Aresta>) (ArrayList<Aresta>) this.matriz[j][i]).remove(e);
         } 
         
