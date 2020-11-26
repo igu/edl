@@ -9,7 +9,7 @@ public class GrafoImpl implements Grafo {
     private ArrayList<Aresta> arestas;
 
     public GrafoImpl() {
-        this.matriz = new Aresta[0][0];
+        this.matriz = new Object[0][0];
         this.vertices = new ArrayList<Vertice>();
         this.arestas = new ArrayList<Aresta>();
     }
