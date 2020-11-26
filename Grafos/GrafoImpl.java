@@ -78,24 +78,19 @@ public class GrafoImpl implements Grafo {
     public Aresta inserirAresta(Vertice v, Vertice w, Object o) {
         Aresta nova = new Aresta(v, w, false, o);
 
-        ArrayList<Aresta> ares_um = (ArrayList<Aresta>) this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)];
-        ArrayList<Aresta> ares_dois = (ArrayList<Aresta>) this.matriz[this.vertices.indexOf(w)][this.vertices.indexOf(v)];
+        boolean ares_um = this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] == null;
+        boolean ares_dois = this.matriz[this.vertices.indexOf(w)][this.vertices.indexOf(v)] == null;
 
-        if (ares_um == null) {
-            ares_um = new ArrayList<Aresta>();
-            ares_um.add(nova);
-            this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] = ares_um;
-
-            ares_dois = new ArrayList<Aresta>();
-            ares_dois.add(nova);
-            this.matriz[this.vertices.indexOf(w)][this.vertices.indexOf(v)] = ares_dois;
-        } else {
-            ares_um.add(nova);
-            this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] = ares_um;
-
-            ares_dois.add(nova);
-            this.matriz[this.vertices.indexOf(w)][this.vertices.indexOf(v)] = ares_dois;
+        if (ares_um) {
+            this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] = new ArrayList<Aresta>();
         }
+        
+        if (ares_dois) {
+            this.matriz[this.vertices.indexOf(w)][this.vertices.indexOf(v)] = new ArrayList<Aresta>();
+        }
+        
+        ((ArrayList<Aresta>) this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)]).add(nova);
+        ((ArrayList<Aresta>) this.matriz[this.vertices.indexOf(w)][this.vertices.indexOf(v)]).add(nova);
         
         this.arestas.add(nova);
 
@@ -175,16 +170,13 @@ public class GrafoImpl implements Grafo {
     public Aresta inserirArestaDirecionada(Vertice v, Vertice w, Object o) {
         Aresta nova = new Aresta(v, w, true, o);
 
-        ArrayList<Aresta> ares = (ArrayList<Aresta>) this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)];
+        boolean ares = this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] == null;
 
-        if (ares == null) {
-            ares = new ArrayList<Aresta>();
-            ares.add(nova);
-            this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] = ares;
-        } else {
-            ares.add(nova);
-            this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] = ares;
+        if (ares) {
+            this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)] = new ArrayList<Aresta>();
         }
+        
+        ((ArrayList<Aresta>) this.matriz[this.vertices.indexOf(v)][this.vertices.indexOf(w)]).add(nova);
         
         this.arestas.add(nova);
 
